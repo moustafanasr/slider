@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>task slider</title>
+    <meta name="description" content />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <link rel="stylesheet" href /> -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <style>
+      * {
+        padding: 0px;
+        margin: 0px;
+        box-sizing: border-box;
+      }
+
+      .sectionSwiper {
+        max-width: 1500px;
+        margin: 0px auto;
+      }
+      .swiper {
+        max-width: 1500px;
+        height: 560px;
+        margin: 0 auto;
+        cursor: pointer;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        transition: all 1s, background-image 0.3s;
+      }
+
+      @media screen and (max-width: 1500px) {
+        .sectionSwiper {
+          width: 100%;
+        }
+        .swiper {
+          width: 100%;
+        }
+      }
+      .swiper-slide {
+        border-left: 1.99px solid #ffffff80;
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: flex-end;
+        align-items: center;
+        padding-left: 30px;
+        padding-right: 50px;
+        transition: 1s all;
+      }
+
+      .swiperSlideChildren {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 50px;
+        z-index: 2;
+        transition: 1s all;
+      }
+      .swiperSlideChildren .icon {
+        position: relative;
+        z-index: 1;
+        transition: 1s all;
+      }
+
+      .swiperSlideChildren .icon img {
+        position: relative;
+        z-index: 3;
+      }
+      .swiperSlideChildren .icon::before {
+        content: "";
+        position: absolute;
+        background-color: #d8d8d8;
+        padding: 10px;
+        width: 100%;
+        height: 100%;
+        opacity: 50%;
+        transform: translate(-49%, -53%);
+        border-radius: 100%;
+        top: 50%;
+        left: 50%;
+        z-index: 2;
+      }
+      .swiperSlideChildren .title {
+        font-family: Lato;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 150%;
+        letter-spacing: 0%;
+        text-align: center;
+        text-transform: capitalize;
+        color: #ffffff;
+        margin: 40px 0px 35px;
+      }
+      .swiperSlideChildren .paragraph {
+        font-family: Lato;
+        font-weight: 600;
+        font-size: 17.92px;
+        line-height: 29.87px;
+        letter-spacing: 0%;
+        text-align: center;
+        color: #ffffff;
+        margin-bottom: 30px;
+        /* display: none; */
+        transition: 1s all;
+      }
+      .swiperSlideChildren .arrow {
+        position: relative;
+        z-index: 1;
+        transition: 1s all;
+      }
+      .swiperSlideChildren .arrow img {
+        position: relative;
+        z-index: 3;
+      }
+      .swiperSlideChildren .arrow::before {
+        content: "";
+        position: absolute;
+        background-color: #7c757380;
+        padding: 10px;
+        width: 100%;
+        height: 100%;
+        transform: translate(-49%, -53%);
+        border-radius: 100%;
+        top: 50%;
+        left: 50%;
+        z-index: 2;
+      }
+      /* .swiperSlideChildren .icon,
+      .swiperSlideChildren .paragraph,
+      .swiperSlideChildren .arrow {
+        opacity: 0;
+        visibility: hidden;
+        transition: 1s all;
+      }
+      .swiper-slide:hover .swiperSlideChildren .icon,
+      .swiper-slide:hover .swiperSlideChildren .paragraph,
+      .swiper-slide:hover .swiperSlideChildren .arrow {
+        opacity: 1;
+        visibility: visible;
+      }
+      .swiper-slide-prev .swiperSlideChildren .icon,
+      .swiper-slide-prev .swiperSlideChildren .paragraph,
+      .swiper-slide-prev .swiperSlideChildren .arrow {
+        opacity: 1;
+        visibility: visible;
+      } */
+      /* When hovering: show elements with animation */
+      .swiper-slide:hover .swiperSlideChildren .icon,
+      .swiper-slide:hover .swiperSlideChildren .paragraph,
+      .swiper-slide:hover .swiperSlideChildren .arrow {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+        animation: show 1s forwards;
+        transition: all 1s;
+      }
+
+      /* When NOT hovering: hide elements with animation */
+      .swiper-slide:not(:hover) .swiperSlideChildren .icon,
+      .swiper-slide:not(:hover) .swiperSlideChildren .paragraph,
+      .swiper-slide:not(:hover) .swiperSlideChildren .arrow {
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+        animation: hide 0.3s forwards;
+        transition: all 1s;
+      }
+      /* Keyframes for showing */
+      @keyframes show {
+        from {
+          opacity: 0;
+          display: none;
+          /* transform: translateY(20px); */
+        }
+        to {
+          opacity: 1;
+          display: block;
+          /* transform: translateY(0); */
+        }
+      }
+
+      /* Keyframes for hiding */
+      @keyframes hide {
+        from {
+          opacity: 1;
+          display: block;
+          /* transform: translateY(0); */
+        }
+        to {
+          /* height: 0px; */
+          opacity: 0;
+          display: none;
+          /* transform: translateY(20px); */
+        }
+      }
+      .swiper-slide-prev .swiperSlideChildren .icon,
+      .swiper-slide-prev .swiperSlideChildren .paragraph,
+      .swiper-slide-prev .swiperSlideChildren .arrow {
+        /* position: relative; */
+        transition: 1s all;
+        height: auto !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+      }
+      @media screen and (max-width: 1024px) {
+        .swiper-slide-active .swiperSlideChildren .icon,
+        .swiper-slide-active .swiperSlideChildren .paragraph,
+        .swiper-slide-active .swiperSlideChildren .arrow {
+          transition: 1s all;
+          height: auto !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          display: block !important;
+        }
+        .swiper-slide-active {
+          position: relative;
+        }
+        .swiper-slide-active::after {
+          content: "";
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          width: 100%;
+          height: 100%;
+          background-color: #0000004d;
+          transition: 1s all;
+          z-index: 1;
+        }
+        .swiper-slide-prev::after {
+          content: "";
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          width: 100%;
+          height: 100%;
+          background-color: transparent !important;
+          transition: 1s all;
+          z-index: 1;
+        }
+        .swiper-slide-prev:hover::after {
+          content: "";
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          width: 100%;
+          height: 100%;
+          background-color: #0000004d !important;
+          z-index: 1;
+          transition: 1s all;
+        }
+        .swiper-slide-prev .swiperSlideChildren .icon,
+        .swiper-slide-prev .swiperSlideChildren .paragraph,
+        .swiper-slide-prev .swiperSlideChildren .arrow {
+          /* position: relative; */
+          transition: 1s all;
+          height: 0px !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
+          display: none !important;
+        }
+        .swiper-slide-prev:hover .swiperSlideChildren .icon,
+        .swiper-slide-prev:hover .swiperSlideChildren .paragraph,
+        .swiper-slide-prev:hover .swiperSlideChildren .arrow {
+          display: block !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          height: auto !important;
+          animation: show 1s forwards;
+          transition: all 1s;
+        }
+        /* Keyframes for showing */
+        @keyframes show {
+          from {
+            opacity: 0;
+            display: none;
+            /* transform: translateY(20px); */
+          }
+          to {
+            opacity: 1;
+            display: block;
+            /* height: auto; */
+            /* transform: translateY(0); */
+          }
+        }
+        /* When NOT hovering: hide elements with animation */
+        .swiper-slide-prev:not(:hover) .swiperSlideChildren .icon,
+        .swiper-slide-prev:not(:hover) .swiperSlideChildren .paragraph,
+        .swiper-slide-prev:not(:hover) .swiperSlideChildren .arrow {
+          display: none !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
+          animation: hide 1s forwards;
+          transition: all 1s;
+        }
+        .swiper-slide-active .swiperSlideChildren {
+          margin-bottom: 100px !important;
+        }
+        .swiper-slide-prev .swiperSlideChildren {
+          margin-bottom: 50px !important;
+        }
+        .swiper-slide:hover .swiperSlideChildren {
+          margin-bottom: 100px !important;
+        }
+      }
+      .swiper-slide-prev .swiperSlideChildren {
+        margin-bottom: 100px;
+      }
+
+      .swiper-slide:hover .swiperSlideChildren {
+        margin-bottom: 100px;
+      }
+
+      .swiper-slide:hover {
+        position: relative;
+      }
+      .swiper-slide:hover::after {
+        content: "";
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #0000004d;
+        z-index: 1;
+        transition: 1s all;
+      }
+      .swiper-slide-prev {
+        position: relative;
+      }
+      .swiper-slide-prev::after {
+        content: "";
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #0000004d;
+        transition: 1s all;
+        z-index: 1;
+      }
+      .paginationSwiper {
+        max-width: 100%;
+        margin-top: 50px;
+        position: relative;
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        align-content: center;
+        justify-content: flex-end;
+        align-items: center;
+        margin-right: 4%;
+      }
+      .swiper-button-next,
+      .swiper-button-prev {
+        background-color: #eeeeee !important;
+        position: unset !important;
+        color: #d50c3d !important;
+        width: 75px !important;
+        right: 0px !important;
+        transition: 1s all;
+        border-radius: 10px;
+      }
+      .swiper-button-next {
+        /* border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px; */
+      }
+      .swiper-button-prev {
+        /* border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px; */
+        margin-right: 20px;
+      }
+      .swiper-button-next:hover,
+      .swiper-button-prev:hover {
+        background-color: #d50c3d !important;
+        color: #eeeeee !important;
+      }
+      .swiper-button-next::after,
+      .swiper-button-prev::after {
+        font-size: 17px !important;
+        font-weight: 900;
+      }
+    </style>
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+
+    <!-- Slider main container -->
+    <section class="sectionSwiper">
+      <div class="swiper">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+          <!-- Slides -->
+          <div class="swiper-slide" backImage="./img/imageBackground1.png">
+            <div class="swiperSlideChildren">
+              <div class="icon">
+                <img src="./img/Group 283.svg" alt="svg" />
+              </div>
+              <div class="title">
+                <h2>FOOD SECURITY & LIVELIHOODS</h2>
+              </div>
+              <div class="paragraph">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipiscing eli mattis
+                  sit phasellus mollis sit aliquam sit nullam
+                </p>
+              </div>
+              <div class="arrow">
+                <img src="./img/Arrow.svg" alt="Arrow" />
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide" backImage="./img/imageBackground2.jpg">
+            <div class="swiperSlideChildren">
+              <div class="icon">
+                <img src="./img/Group 283.svg" alt="svg" />
+              </div>
+              <div class="title">
+                <h2>FOOD SECURITY & LIVELIHOODS</h2>
+              </div>
+              <div class="paragraph">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipiscing eli mattis
+                  sit phasellus mollis sit aliquam sit nullam
+                </p>
+              </div>
+              <div class="arrow">
+                <img src="./img/Arrow.svg" alt="Arrow" />
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide" backImage="./img/imageBackground3.jpg">
+            <div class="swiperSlideChildren">
+              <div class="icon">
+                <img src="./img/Group 283.svg" alt="svg" />
+              </div>
+              <div class="title">
+                <h2>FOOD SECURITY & LIVELIHOODS</h2>
+              </div>
+              <div class="paragraph">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipiscing eli mattis
+                  sit phasellus mollis sit aliquam sit nullam
+                </p>
+              </div>
+              <div class="arrow">
+                <img src="./img/Arrow.svg" alt="Arrow" />
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide" backImage="./img/imageBackground4.jpg">
+            <div class="swiperSlideChildren">
+              <div class="icon">
+                <img src="./img/Group 283.svg" alt="svg" />
+              </div>
+              <div class="title">
+                <h2>FOOD SECURITY & LIVELIHOODS</h2>
+              </div>
+              <div class="paragraph">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipiscing eli mattis
+                  sit phasellus mollis sit aliquam sit nullam
+                </p>
+              </div>
+              <div class="arrow">
+                <img src="./img/Arrow.svg" alt="Arrow" />
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide" backImage="./img/imageBackground5.jpg">
+            <div class="swiperSlideChildren">
+              <div class="icon">
+                <img src="./img/Group 283.svg" alt="svg" />
+              </div>
+              <div class="title">
+                <h2>FOOD SECURITY & LIVELIHOODS</h2>
+              </div>
+              <div class="paragraph">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipiscing eli mattis
+                  sit phasellus mollis sit aliquam sit nullam
+                </p>
+              </div>
+              <div class="arrow">
+                <img src="./img/Arrow.svg" alt="Arrow" />
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide" backImage="./img/imageBackground6.jpg">
+            <div class="swiperSlideChildren">
+              <div class="icon">
+                <img src="./img/Group 283.svg" alt="svg" />
+              </div>
+              <div class="title">
+                <h2>FOOD SECURITY & LIVELIHOODS</h2>
+              </div>
+              <div class="paragraph">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipiscing eli mattis
+                  sit phasellus mollis sit aliquam sit nullam
+                </p>
+              </div>
+              <div class="arrow">
+                <img src="./img/Arrow.svg" alt="Arrow" />
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide" backImage="./img/imageBackground7.jpg">
+            <div class="swiperSlideChildren">
+              <div class="icon">
+                <img src="./img/Group 283.svg" alt="svg" />
+              </div>
+              <div class="title">
+                <h2>FOOD SECURITY & LIVELIHOODS</h2>
+              </div>
+              <div class="paragraph">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipiscing eli mattis
+                  sit phasellus mollis sit aliquam sit nullam
+                </p>
+              </div>
+              <div class="arrow">
+                <img src="./img/Arrow.svg" alt="Arrow" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="paginationSwiper">
+        <!-- If we need navigation buttons -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+      const swiper = new Swiper(".swiper", {
+        direction: "horizontal",
+        loop: true,
+        slidesPerView: 1.2,
+        centeredSlides: true,
+        speed: 1000,
+        autoplay: {
+          delay: 2000,
+          disableOnInteraction: false
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev"
+        },
+        breakpoints: {
+          // Responsive settings
+          320: {
+            slidesPerView: 1.2,
+            centeredSlides: true
+          },
+          700: {
+            slidesPerView: 2.2,
+            centeredSlides: true
+          },
+          1024: {
+            slidesPerView: 3.3,
+            centeredSlides: true
+          }
+        },
+        on: {
+          slideChangeTransitionEnd: function () {
+            updateBackground();
+          }
+        }
+      });
+
+      const swiperContainer = document.querySelector(".swiper");
+      const slides = document.querySelectorAll(".swiper-slide");
+      swiperContainer.addEventListener("mouseenter", () => {
+        swiper.autoplay.stop();
+      });
+
+      swiperContainer.addEventListener("mouseleave", () => {
+        swiper.autoplay.start();
+      });
+      function updateBackground() {
+        const activeSlide = document.querySelector(".swiper-slide-prev");
+        if (activeSlide) {
+          const bg = activeSlide.getAttribute("backImage");
+          swiperContainer.style.backgroundImage = `url('${bg}')`;
+        }
+      }
+
+      updateBackground(); // Set initial background
+
+      slides.forEach((slide) => {
+        slide.addEventListener("mouseenter", () => {
+          const bg = slide.getAttribute("backImage");
+          swiperContainer.style.backgroundImage = `url('${bg}')`;
+        });
+
+        slide.addEventListener("mouseleave", () => {
+          updateBackground();
+        });
+      });
+    </script>
+  </body>
+</html>
