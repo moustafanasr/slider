@@ -550,7 +550,7 @@
     </section>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-      // First, wait for all images to load
+      // Wait for all images to load
       function imagesLoaded(callback) {
         const images = document.querySelectorAll('img');
         let loadedCount = 0;
@@ -566,7 +566,7 @@
             incrementCounter();
           } else {
             img.addEventListener('load', incrementCounter);
-            img.addEventListener('error', incrementCounter); // Handle broken images too
+            img.addEventListener('error', incrementCounter);
           }
         });
     
@@ -578,7 +578,7 @@
         }
       }
     
-      // Now your original code inside the callback
+      // When all images are loaded, initialize everything
       imagesLoaded(function () {
         const swiper = new Swiper(".swiper", {
           direction: "horizontal",
@@ -648,6 +648,6 @@
         });
       });
     </script>
-    
+        
   </body>
 </html>
