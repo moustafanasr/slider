@@ -550,71 +550,104 @@
     </section>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-      const swiper = new Swiper(".swiper", {
-        direction: "horizontal",
-        loop: true,
-        slidesPerView: 1.2,
-        centeredSlides: true,
-        speed: 1000,
-        autoplay: {
-          delay: 2000,
-          disableOnInteraction: false
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        },
-        breakpoints: {
-          // Responsive settings
-          320: {
-            slidesPerView: 1.2,
-            centeredSlides: true
-          },
-          700: {
-            slidesPerView: 2.2,
-            centeredSlides: true
-          },
-          1024: {
-            slidesPerView: 3.3,
-            centeredSlides: true
-          }
-        },
-        on: {
-          slideChangeTransitionEnd: function () {
-            updateBackground();
-          }
+      // First, wait for all images to load
+      function imagesLoaded(callback) {
+        const images = document.querySelectorAll('img');
+        let loadedCount = 0;
+        const totalImages = images.length;
+    
+        if (totalImages === 0) {
+          callback();
+          return;
         }
-      });
-
-      const swiperContainer = document.querySelector(".swiper");
-      const slides = document.querySelectorAll(".swiper-slide");
-      swiperContainer.addEventListener("mouseenter", () => {
-        swiper.autoplay.stop();
-      });
-
-      swiperContainer.addEventListener("mouseleave", () => {
-        swiper.autoplay.start();
-      });
-      function updateBackground() {
-        const activeSlide = document.querySelector(".swiper-slide-prev");
-        if (activeSlide) {
-          const bg = activeSlide.getAttribute("backImage");
-          swiperContainer.style.backgroundImage = `url('${bg}')`;
+    
+        images.forEach((img) => {
+          if (img.complete) {
+            incrementCounter();
+          } else {
+            img.addEventListener('load', incrementCounter);
+            img.addEventListener('error', incrementCounter); // Handle broken images too
+          }
+        });
+    
+        function incrementCounter() {
+          loadedCount++;
+          if (loadedCount === totalImages) {
+            callback();
+          }
         }
       }
-
-      updateBackground(); // Set initial background
-
-      slides.forEach((slide) => {
-        slide.addEventListener("mouseenter", () => {
-          const bg = slide.getAttribute("backImage");
-          swiperContainer.style.backgroundImage = `url('${bg}')`;
+    
+      // Now your original code inside the callback
+      imagesLoaded(function () {
+        const swiper = new Swiper(".swiper", {
+          direction: "horizontal",
+          loop: true,
+          slidesPerView: 1.2,
+          centeredSlides: true,
+          speed: 1000,
+          autoplay: {
+            delay: 2000,
+            disableOnInteraction: false
+          },
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+          },
+          breakpoints: {
+            320: {
+              slidesPerView: 1.2,
+              centeredSlides: true
+            },
+            700: {
+              slidesPerView: 2.2,
+              centeredSlides: true
+            },
+            1024: {
+              slidesPerView: 3.3,
+              centeredSlides: true
+            }
+          },
+          on: {
+            slideChangeTransitionEnd: function () {
+              updateBackground();
+            }
+          }
         });
-
-        slide.addEventListener("mouseleave", () => {
-          updateBackground();
+    
+        const swiperContainer = document.querySelector(".swiper");
+        const slides = document.querySelectorAll(".swiper-slide");
+    
+        swiperContainer.addEventListener("mouseenter", () => {
+          swiper.autoplay.stop();
+        });
+    
+        swiperContainer.addEventListener("mouseleave", () => {
+          swiper.autoplay.start();
+        });
+    
+        function updateBackground() {
+          const activeSlide = document.querySelector(".swiper-slide-prev");
+          if (activeSlide) {
+            const bg = activeSlide.getAttribute("backImage");
+            swiperContainer.style.backgroundImage = `url('${bg}')`;
+          }
+        }
+    
+        updateBackground(); // Set initial background
+    
+        slides.forEach((slide) => {
+          slide.addEventListener("mouseenter", () => {
+            const bg = slide.getAttribute("backImage");
+            swiperContainer.style.backgroundImage = `url('${bg}')`;
+          });
+    
+          slide.addEventListener("mouseleave", () => {
+            updateBackground();
+          });
         });
       });
     </script>
+    
   </body>
 </html>
