@@ -34,7 +34,8 @@
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-        transition: all 1s, background-image 0.5s;
+        /* transition: all 1s, background-image 1s; */
+        transition: all 1s, background-image 0.5s ease-in-out;
       }
 
       @media screen and (max-width: 1500px) {
@@ -552,7 +553,7 @@
     <script>
       // Wait for all images to load
       function imagesLoaded(callback) {
-        const images = document.querySelectorAll('img');
+        const images = document.querySelectorAll("img");
         let loadedCount = 0;
         const totalImages = images.length;
     
@@ -565,8 +566,8 @@
           if (img.complete) {
             incrementCounter();
           } else {
-            img.addEventListener('load', incrementCounter);
-            img.addEventListener('error', incrementCounter);
+            img.addEventListener("load", incrementCounter);
+            img.addEventListener("error", incrementCounter);
           }
         });
     
@@ -578,8 +579,12 @@
         }
       }
     
-      // When all images are loaded, initialize everything
       imagesLoaded(function () {
+        const swiperContainer = document.querySelector(".swiper");
+        const slides = document.querySelectorAll(".swiper-slide");
+    
+        let bgTimer = null;
+    
         const swiper = new Swiper(".swiper", {
           direction: "horizontal",
           loop: true,
@@ -587,7 +592,7 @@
           centeredSlides: true,
           speed: 1000,
           autoplay: {
-            delay: 1000,
+            delay: 5000,
             disableOnInteraction: false
           },
           navigation: {
@@ -595,58 +600,68 @@
             prevEl: ".swiper-button-prev"
           },
           breakpoints: {
-            320: { slidesPerView: 1.2, centeredSlides: true },
-            700: { slidesPerView: 2.2, centeredSlides: true },
-            1024: { slidesPerView: 3.3, centeredSlides: true }
+            320: {
+              slidesPerView: 1.2,
+              centeredSlides: true
+            },
+            700: {
+              slidesPerView: 2.2,
+              centeredSlides: true
+            },
+            1024: {
+              slidesPerView: 3.3,
+              centeredSlides: true
+            }
           },
           on: {
-            slideChangeTransitionEnd: function () {
-              updateBackground();
+            init: function () {
+              startBackgroundTimer(this.realIndex);
+            },
+            slideChange: function () {
+              startBackgroundTimer(this.realIndex);
             }
           }
         });
     
-        const swiperContainer = document.querySelector(".swiper");
-        const slides = document.querySelectorAll(".swiper-slide");
+        function updateBackground(index) {
+          const activeSlide = slides[index];
+          if (activeSlide) {
+            const bg = activeSlide.getAttribute("backImage");
+            swiperContainer.style.backgroundImage = `url('${bg}')`;
+          }
+        }
     
-        // Add fade transition to background image
-        swiperContainer.style.transition = "background-image 0.8s ease-in-out";
+        function startBackgroundTimer(index) {
+          clearTimeout(bgTimer); // clear previous timer
+          bgTimer = setTimeout(() => {
+            updateBackground(index);
+          }, 0); // wait 5s before updating background
+        }
+    
+        slides.forEach((slide, index) => {
+          slide.addEventListener("mouseenter", () => {
+            clearTimeout(bgTimer); // Reset counter on hover
+            const bg = slide.getAttribute("backImage");
+            swiperContainer.style.backgroundImage = `url('${bg}')`;
+          });
+    
+          slide.addEventListener("mouseleave", () => {
+            startBackgroundTimer(swiper.realIndex); // Restart counter on leave
+          });
+        });
     
         swiperContainer.addEventListener("mouseenter", () => {
           swiper.autoplay.stop();
+          clearTimeout(bgTimer); // stop background timer too
         });
     
         swiperContainer.addEventListener("mouseleave", () => {
           swiper.autoplay.start();
-        });
-    
-        function updateBackground() {
-          const activeSlide = document.querySelector(".swiper-slide-active");
-          if (activeSlide) {
-            const bg = activeSlide.getAttribute("backImage");
-            if (bg) {
-              swiperContainer.style.backgroundImage = `url('${bg}')`;
-            }
-          }
-        }
-    
-        updateBackground(); // Set initial background
-    
-        slides.forEach((slide) => {
-          slide.addEventListener("mouseenter", () => {
-            const bg = slide.getAttribute("backImage");
-            if (bg) {
-              swiperContainer.style.backgroundImage = `url('${bg}')`;
-            }
-          });
-    
-          slide.addEventListener("mouseleave", () => {
-            updateBackground();
-          });
+          startBackgroundTimer(swiper.realIndex); // restart counter after leave
         });
       });
     </script>
     
-        
+    
   </body>
 </html>
