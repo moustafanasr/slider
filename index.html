@@ -556,12 +556,12 @@
         const images = document.querySelectorAll("img");
         let loadedCount = 0;
         const totalImages = images.length;
-    
+
         if (totalImages === 0) {
           callback();
           return;
         }
-    
+
         images.forEach((img) => {
           if (img.complete) {
             incrementCounter();
@@ -570,7 +570,7 @@
             img.addEventListener("error", incrementCounter);
           }
         });
-    
+
         function incrementCounter() {
           loadedCount++;
           if (loadedCount === totalImages) {
@@ -578,13 +578,13 @@
           }
         }
       }
-    
+
       imagesLoaded(function () {
         const swiperContainer = document.querySelector(".swiper");
         const slides = document.querySelectorAll(".swiper-slide");
-    
+
         let bgTimer = null;
-    
+
         const swiper = new Swiper(".swiper", {
           direction: "horizontal",
           loop: true,
@@ -622,46 +622,48 @@
             }
           }
         });
-    
+
         function updateBackground(index) {
-          const activeSlide = slides[index];
+          let targetIndex = index - 1;
+          if (targetIndex < 0) {
+            targetIndex = slides.length - 1; // loop back to last slide if negative
+          }
+          const activeSlide = slides[targetIndex];
           if (activeSlide) {
             const bg = activeSlide.getAttribute("backImage");
             swiperContainer.style.backgroundImage = `url('${bg}')`;
           }
         }
-    
+
         function startBackgroundTimer(index) {
           clearTimeout(bgTimer); // clear previous timer
           bgTimer = setTimeout(() => {
             updateBackground(index);
           }, 0); // wait 5s before updating background
         }
-    
+
         slides.forEach((slide, index) => {
           slide.addEventListener("mouseenter", () => {
             clearTimeout(bgTimer); // Reset counter on hover
             const bg = slide.getAttribute("backImage");
             swiperContainer.style.backgroundImage = `url('${bg}')`;
           });
-    
+
           slide.addEventListener("mouseleave", () => {
             startBackgroundTimer(swiper.realIndex); // Restart counter on leave
           });
         });
-    
+
         swiperContainer.addEventListener("mouseenter", () => {
           swiper.autoplay.stop();
           clearTimeout(bgTimer); // stop background timer too
         });
-    
+
         swiperContainer.addEventListener("mouseleave", () => {
           swiper.autoplay.start();
           startBackgroundTimer(swiper.realIndex); // restart counter after leave
         });
       });
     </script>
-    
-    
   </body>
 </html>
