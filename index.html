@@ -624,10 +624,19 @@
         });
 
         function updateBackground(index) {
-          let targetIndex = index - 1;
-          if (targetIndex < 0) {
-            targetIndex = slides.length - 1; // loop back to last slide if negative
+          const windowWidth = window.innerWidth;
+
+          let targetIndex = index;
+
+          // If the window width is less than 1024, use the current slide's index (natural index)
+          if (windowWidth >= 1024) {
+            // If the window width is 1024px or larger, use the previous slide's index
+            targetIndex = index - 1;
+            if (targetIndex < 0) {
+              targetIndex = slides.length - 1; // loop back to last slide if negative
+            }
           }
+
           const activeSlide = slides[targetIndex];
           if (activeSlide) {
             const bg = activeSlide.getAttribute("backImage");
