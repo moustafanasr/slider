@@ -34,7 +34,7 @@
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-        transition: all 1s, background-image 0.3s;
+        transition: all 1s, background-image 0.5s;
       }
 
       @media screen and (max-width: 1500px) {
@@ -587,7 +587,7 @@
           centeredSlides: true,
           speed: 1000,
           autoplay: {
-            delay: 2000,
+            delay: 1000,
             disableOnInteraction: false
           },
           navigation: {
@@ -595,18 +595,9 @@
             prevEl: ".swiper-button-prev"
           },
           breakpoints: {
-            320: {
-              slidesPerView: 1.2,
-              centeredSlides: true
-            },
-            700: {
-              slidesPerView: 2.2,
-              centeredSlides: true
-            },
-            1024: {
-              slidesPerView: 3.3,
-              centeredSlides: true
-            }
+            320: { slidesPerView: 1.2, centeredSlides: true },
+            700: { slidesPerView: 2.2, centeredSlides: true },
+            1024: { slidesPerView: 3.3, centeredSlides: true }
           },
           on: {
             slideChangeTransitionEnd: function () {
@@ -618,6 +609,9 @@
         const swiperContainer = document.querySelector(".swiper");
         const slides = document.querySelectorAll(".swiper-slide");
     
+        // Add fade transition to background image
+        swiperContainer.style.transition = "background-image 0.8s ease-in-out";
+    
         swiperContainer.addEventListener("mouseenter", () => {
           swiper.autoplay.stop();
         });
@@ -627,10 +621,12 @@
         });
     
         function updateBackground() {
-          const activeSlide = document.querySelector(".swiper-slide-prev");
+          const activeSlide = document.querySelector(".swiper-slide-active");
           if (activeSlide) {
             const bg = activeSlide.getAttribute("backImage");
-            swiperContainer.style.backgroundImage = `url('${bg}')`;
+            if (bg) {
+              swiperContainer.style.backgroundImage = `url('${bg}')`;
+            }
           }
         }
     
@@ -639,7 +635,9 @@
         slides.forEach((slide) => {
           slide.addEventListener("mouseenter", () => {
             const bg = slide.getAttribute("backImage");
-            swiperContainer.style.backgroundImage = `url('${bg}')`;
+            if (bg) {
+              swiperContainer.style.backgroundImage = `url('${bg}')`;
+            }
           });
     
           slide.addEventListener("mouseleave", () => {
@@ -648,6 +646,7 @@
         });
       });
     </script>
+    
         
   </body>
 </html>
